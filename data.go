@@ -9,8 +9,9 @@ var (
 func init() {
 
 	rewriteRune = map[rune]rune{
-		'`':          '\'',
-		'ё':          'е',
+		'`':    '\'',
+		'’':    '\'',
+		'ё':    'е',
 		HELLIP: '.',
 		MDASH:  '-',
 		NDASH:  '-',

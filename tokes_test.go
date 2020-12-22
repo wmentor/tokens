@@ -43,8 +43,9 @@ func TestTokenizer(t *testing.T) {
 	tF("Поставь хэштег #приветмир!", []string{"поставь", "хэштег", "#приветмир", "!"})
 	tF("хэштеги: #приветмир#МИР#улет", []string{"хэштеги", ":", "#приветмир", "#мир", "#улет"})
 	tF("ставь#тест в пост", []string{"ставь", "#тест", "в", "пост"})
-	tF("select model X/123.12. It's super", []string{"select", "model", "x/123.12", ".", "it", "is", "super"})
+	tF("select model X/123.12. It's super", []string{"select", "model", "x/123.12", ".", "it's", "super"})
 	tF("Router IP is 192.168.1.1", []string{"router", "ip", "is", "192.168.1.1"})
+	tF("There're so many people", []string{"there're", "so", "many", "people"})
 	tF("At 5:30 am", []string{"at", "5:30", "am"})
 	tF("01:12:25 is a good time", []string{"01:12:25", "is", "a", "good", "time"})
 	tF("Москва—мой любимый город", []string{"москва", "-", "мой", "любимый", "город"})
@@ -58,7 +59,8 @@ func TestTokenizer(t *testing.T) {
 	tF("My email is test1.life@mail.ru", []string{"my", "email", "is", "test1.life@mail.ru"})
 	tF("@test1 and @test2 work in London", []string{"@test1", "and", "@test2", "work", "in", "london"})
 	tF("Good day, @black_dragon!", []string{"good", "day", ",", "@black_dragon", "!"})
-	tF("It's @madman", []string{"it", "is", "@madman"})
+	tF("It's @madman", []string{"it's", "@madman"})
+	tF("Alvin’s chief pilot and the leader of the expedition", []string{"alvin's", "chief", "pilot", "and", "the", "leader", "of", "the", "expedition"})
 
 	tS := func(txt string, wait []string) {
 

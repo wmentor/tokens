@@ -95,24 +95,6 @@ func Process(in io.Reader, fn TokenFunc) {
 
 	sinQuote := func() {
 
-		switch mkr2.String() {
-
-		case "ll":
-			fn(mkr1.String())
-			fn("will")
-			return
-
-		case "re":
-			fn(mkr1.String())
-			fn("are")
-			return
-
-		case "s":
-			fn(mkr1.String())
-			fn("is")
-			return
-		}
-
 		mkr1.WriteRune('\'')
 		mkr1.WriteString(mkr2.String())
 
