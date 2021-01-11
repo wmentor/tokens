@@ -79,4 +79,28 @@ func TestTokenizer(t *testing.T) {
 	}
 
 	tS("Hello, my little friend!", []string{"hello", ",", "my", "little", "friend", "!"})
+
+	tFCS := func(txt string, wait []string) {
+
+		var res []string
+
+		Process(strings.NewReader(txt), func(w string) {
+			res = append(res, w)
+		}, OptCaseSensitive)
+
+		if len(res) != len(wait) {
+			t.Fatalf("Invalid result size for: %s\n", txt)
+		}
+
+		for i, v := range wait {
+			if res[i] != v {
+				t.Fatalf("Invalid result for: %s\n", txt)
+			}
+		}
+	}
+
+	tFCS("Hello, my little friend!", []string{"Hello", ",", "my", "little", "friend", "!"})
+	tFCS("хэштеги: #приветмир#МИР#улет", []string{"хэштеги", ":", "#приветмир", "#МИР", "#улет"})
+	tFCS("Капитан д`Артаньян", []string{"Капитан", "д'Артаньян"})
+	tFCS("Открой ссылку hTTPs://wmentor.ru", []string{"Открой", "ссылку", "hTTPs://wmentor.ru"})
 }

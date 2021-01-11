@@ -9,11 +9,30 @@ import (
 
 type TokenFunc func(string)
 
+type Opt int64
+
+const (
+	OptCaseSensitive Opt = 0x01 << iota
+)
+
+type params struct {
+	CaseSensitive bool
+}
+
 func isAlNum(r rune) bool {
 	return unicode.IsLetter(r) || unicode.IsDigit(r) || r == '_'
 }
 
-func Process(in io.Reader, fn TokenFunc) {
+func Process(in io.Reader, fn TokenFunc, opts ...Opt) {
+
+	var prms params
+
+	for _, opt := range opts {
+		switch opt {
+		case OptCaseSensitive:
+			prms.CaseSensitive = true
+		}
+	}
 
 	br := bufio.NewReader(in)
 
@@ -66,7 +85,7 @@ func Process(in io.Reader, fn TokenFunc) {
 
 		case unicode.IsPunct(r):
 
-			if r == ':' && protos[mkr1.String()] {
+			if r == ':' && protos[strings.ToLower(mkr1.String())] {
 				mode = 3
 			} else if linkRunes[r] {
 				prev = r
@@ -263,7 +282,9 @@ func Process(in io.Reader, fn TokenFunc) {
 			break
 		}
 
-		r = unicode.ToLower(r)
+		if !prms.CaseSensitive {
+			r = unicode.ToLower(r)
+		}
 
 		if rn, has := rewriteRune[r]; has {
 
@@ -305,7 +326,7 @@ func Process(in io.Reader, fn TokenFunc) {
 
 }
 
-func Stream(in io.Reader) <-chan string {
+func Stream(in io.Reader, opts ...Opt) <-chan string {
 
 	out := make(chan string, 2048)
 
@@ -313,7 +334,7 @@ func Stream(in io.Reader) <-chan string {
 		defer close(out)
 		Process(in, func(w string) {
 			out <- w
-		})
+		}, opts...)
 	}()
 
 	return out
