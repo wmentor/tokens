@@ -1,6 +1,12 @@
 # tokens
+=====================
 
-There are two ways fetch tokens from text. First is token chan and second is token callback.
+[![https://pkg.go.dev/github.com/wmentor/tokens](https://pkg.go.dev/badge/github.com/wmentor/tokens.svg)](https://pkg.go.dev/github.com/wmentor/tokens)
+[![https://github.com/wmentor/tokens/actions?query=workflow:test](https://github.com/wmentor/tokens/workflows/test/badge.svg?branch=master&event=push)](https://github.com/wmentor/tokens/actions?query=workflow:test)
+[![https://coveralls.io/github/wmentor/tokens](https://coveralls.io/repos/github/wmentor/tokens/badge.svg?branch=master)](https://coveralls.io/github/wmentor/tokens)
+[![https://goreportcard.com/report/github.com/wmentor/tokens](https://goreportcard.com/badge/github.com/wmentor/tokens)](https://goreportcard.com/report/github.com/wmentor/tokens)
+
+Text to tokens Go library. There are two ways fetch tokens from text. First is token chan and second is token callback.
 
 # Token chan
 
