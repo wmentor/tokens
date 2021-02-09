@@ -17,13 +17,11 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
     - name: Run tests
-      run: go test -v ./... -covermode=count -coverprofile=coverage.out
-    - name: Convert coverage.out to coverage.lcov
+      run: go test -v ./... -covermode=count -coverprofile=coverage.out -coverpkg=./...
+    - name: Send coverage
       if: "matrix.platform == 'ubuntu-latest'"
-      uses: jandelgado/gcov2lcov-action@v1.0.6
-    - name: Coveralls
-      if: "matrix.platform == 'ubuntu-latest'"
-      uses: coverallsapp/github-action@v1.1.2
-      with:
-          github-token: ${{ secrets.github_token }}
-          path-to-lcov: coverage.lcov
+      env:
+        COVERALLS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        GO111MODULE=off go get github.com/mattn/goveralls
+        $(go env GOPATH)/bin/goveralls -coverprofile=coverage.out -service=github
