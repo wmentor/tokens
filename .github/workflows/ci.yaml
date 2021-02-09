@@ -17,11 +17,4 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
     - name: Run tests
-      run: go test -v ./... -covermode=count -coverprofile=coverage.out -coverpkg=./...
-    - name: Send coverage
-      if: "matrix.platform == 'ubuntu-latest'"
-      env:
-        COVERALLS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: |
-        GO111MODULE=off go get github.com/mattn/goveralls
-        $(go env GOPATH)/bin/goveralls -coverprofile=coverage.out -service=github
+      run: go test ./...
