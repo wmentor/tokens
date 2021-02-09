@@ -19,8 +19,10 @@ jobs:
     - name: Run tests
       run: go test -v ./... -covermode=count -coverprofile=coverage.out
     - name: Convert coverage.out to coverage.lcov
+      if: "matrix.platform == 'ubuntu-latest'"
       uses: jandelgado/gcov2lcov-action@v1.0.6
     - name: Coveralls
+      if: "matrix.platform == 'ubuntu-latest'"
       uses: coverallsapp/github-action@v1.1.2
       with:
           github-token: ${{ secrets.github_token }}
