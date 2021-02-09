@@ -1,5 +1,4 @@
 # tokens
-=====================
 
 [![https://pkg.go.dev/github.com/wmentor/tokens](https://pkg.go.dev/badge/github.com/wmentor/tokens.svg)](https://pkg.go.dev/github.com/wmentor/tokens)
 [![https://github.com/wmentor/tokens/actions?query=workflow:test](https://github.com/wmentor/tokens/workflows/test/badge.svg?branch=master&event=push)](https://github.com/wmentor/tokens/actions?query=workflow:test)
