@@ -6,9 +6,9 @@
 [![https://pkg.go.dev/github.com/wmentor/tokens](https://pkg.go.dev/badge/github.com/wmentor/tokens.svg)](https://pkg.go.dev/github.com/wmentor/tokens)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Text to tokens Go library. There are two ways fetch tokens from text. First is token chan and second is token callback.
+Text to tokens Go library.
 
-# Token chan
+# Token get insensitive mode
 
 ```go
 package main
@@ -24,7 +24,13 @@ func main() {
 
 	txt := "Hello, my little friend!"
 
-	for tok := range tokens.Stream(strings.NewReader(txt)) {
+	tokenizer := tokens.New(strings.NewReader(txt))
+
+	for {
+		tok, err := range tokenizer.Token()
+		if err != nil { // io.EOF
+			break
+		}
 		fmt.Println(tok)
 	}
 }
@@ -55,9 +61,15 @@ import (
 
 func main() {
 
-	txt := "Hello, my liTTle friend!"
+	txt := "Hello, my little friend!"
 
-	for tok := range tokens.Stream(strings.NewReader(txt), tokens.OptCaseSensitive) {
+	tokenizer := tokens.New(strings.NewReader(txt), tokens.WithCaseSensitive())
+
+	for {
+		tok, err := range tokenizer.Token()
+		if err != nil { // io.EOF
+			break
+		}
 		fmt.Println(tok)
 	}
 }
@@ -73,71 +85,3 @@ liTTle
 friend
 !
 ```
-
-# Token callback
-
-```go
-package main
-
-import (
-	"fmt"
-	"strings"
-
-	"github.com/wmentor/tokens"
-)
-
-func main() {
-
-	txt := "Hello, my little friend!"
-
-	tokens.Process(strings.NewReader(txt), func(w string) {
-		fmt.Println(w)
-	})
-}
-```
-
-Result:
-
-```
-hello
-,
-my
-little
-friend
-!
-```
-
-Case sensitive mode:
-
-```go
-package main
-
-import (
-	"fmt"
-	"strings"
-
-	"github.com/wmentor/tokens"
-)
-
-func main() {
-
-	txt := "Hello, my liTtLe fRiEnd!"
-
-	tokens.Process(strings.NewReader(txt), func(w string) {
-		fmt.Println(w)
-	}, tokens.OptCaseSensitive)
-}
-```
-
-Result:
-
-```
-Hello
-,
-my
-liTtLe
-fRiEnd
-!
-```
-
-Unlike the first case, we don't create new chan and goroutine. This method is more efficient especially when we process a large number of short lines.

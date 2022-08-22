@@ -1,4 +1,4 @@
-package tokens
+package runes
 
 const (
 	ASYMP    rune = '≈'
