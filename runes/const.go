@@ -1,3 +1,5 @@
+// Copyright (c) 2023, Mikhail Kirillov <mikkirillov@yandex.ru>
+
 package runes
 
 const (
@@ -47,4 +49,8 @@ const (
 	TRADE    rune = '™'
 	UML      rune = '¨'
 	YEN      rune = '¥'
+	ZWSP     rune = '\u200B'
+	ZWNBSP   rune = '\uFEFF'
+	ZWJ      rune = '\u200D'
+	ZWNJ     rune = '\u200C'
 )

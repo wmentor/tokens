@@ -1,3 +1,5 @@
+// Copyright (c) 2023, Mikhail Kirillov <mikkirillov@yandex.ru>
+
 package tokens
 
 import (
@@ -7,6 +9,7 @@ import (
 	"unicode"
 
 	buffer "github.com/wmentor/tbuf"
+
 	"github.com/wmentor/tokens/runes"
 )
 
@@ -176,7 +179,7 @@ func (t *Tokenizer) onRune(r rune) {
 
 func (t *Tokenizer) state0(r rune) {
 	switch {
-	case unicode.IsSpace(r):
+	case isSpace(r):
 		t.mode = 0
 
 	case t.isAlNum(r):
@@ -235,7 +238,7 @@ func (t *Tokenizer) state1(r rune) {
 	case t.isAlNum(r):
 		t.mkr1.WriteRune(r)
 
-	case unicode.IsSpace(r):
+	case isSpace(r):
 		t.onToken(t.mkr1.String())
 		t.mode = 0
 
@@ -268,7 +271,7 @@ func (t *Tokenizer) state2(r rune) {
 		t.onToken(string(r))
 		t.mode = 0
 
-	case unicode.IsSpace(r):
+	case isSpace(r):
 		t.onToken(t.mkr1.String())
 		t.onToken(string(t.prevRune))
 		t.mode = 0
@@ -305,7 +308,7 @@ func (t *Tokenizer) state4(r rune) {
 }
 
 func (t *Tokenizer) state5(r rune) {
-	if unicode.IsSpace(r) {
+	if isSpace(r) {
 		t.onToken(t.mkr1.String())
 		t.mode = 0
 	} else {
@@ -323,7 +326,7 @@ func (t *Tokenizer) state6(r rune) {
 		t.mkr1.Reset()
 		t.mkr1.WriteRune('#')
 
-	case unicode.IsSpace(r):
+	case isSpace(r):
 		t.onToken(t.mkr1.String())
 		t.mode = 0
 

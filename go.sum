@@ -1,2 +1,6 @@
-github.com/wmentor/tbuf v1.0.0 h1:KHfiIdOTWor7a/5dSoLovxgGuipLAAU1X4+U3jzdIZ4=
-github.com/wmentor/tbuf v1.0.0/go.mod h1:YvYY3BMph/UVPSIMbQoraxgr7+7DCAvYSSJHZk2gsBQ=
+github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
+github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
+github.com/stretchr/testify v1.8.4 h1:CcVxjf3Q8PM0mHUKJCdn+eZZtm5yQwehR5yeSVQQcUk=
+github.com/wmentor/tbuf v1.0.1 h1:IonHpWwR0Wyh3Jfu0AbGSqzVDzUZ1zU61ML5F1CdBno=
+github.com/wmentor/tbuf v1.0.1/go.mod h1:1lO+hvrkqqjEcR74vrNfBL3jg0NnpGHDWHeFxRsk7js=
+gopkg.in/yaml.v3 v3.0.1 h1:fxVm/GzAzEWqLHuvctI91KS9hhNmmWOoWu0XTYJS7CA=

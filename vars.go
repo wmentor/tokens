@@ -1,3 +1,5 @@
+// Copyright (c) 2023, Mikhail Kirillov <mikkirillov@yandex.ru>
+
 package tokens
 
 import (
