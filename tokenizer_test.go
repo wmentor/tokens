@@ -3,8 +3,13 @@
 package tokens_test
 
 import (
+	"bytes"
+	"compress/gzip"
+	"log"
 	"strings"
 	"testing"
+
+	"github.com/stretchr/testify/require"
 
 	generic "github.com/wmentor/tokens"
 )
@@ -17,7 +22,34 @@ func tF(t *testing.T, src string, caseSensitive bool, wait string) {
 	if caseSensitive {
 		opts = append(opts, generic.WithCaseSensitive())
 	}
-	parser := generic.New(strings.NewReader(src), opts...)
+	parser, err := generic.New(strings.NewReader(src), opts...)
+	require.NoError(t, err)
+	defer parser.Close()
+
+	for {
+		tok, err := parser.Token()
+		if err != nil {
+			break
+		}
+		res = append(res, tok)
+	}
+
+	if strings.Join(res, "|") != wait {
+		t.Fatalf("test failed src=%s ret=%v wait=%v", src, res, wait)
+	}
+}
+
+func tFB(t *testing.T, src []byte, caseSensitive bool, wait string) {
+	t.Helper()
+
+	res := make([]string, 0, len(wait))
+	opts := make([]generic.Option, 0, 1)
+	if caseSensitive {
+		opts = append(opts, generic.WithCaseSensitive())
+	}
+	parser, err := generic.New(bytes.NewReader(src), opts...)
+	require.NoError(t, err)
+	defer parser.Close()
 
 	for {
 		tok, err := parser.Token()
@@ -223,4 +255,21 @@ func TestParser037(t *testing.T) {
 	t.Parallel()
 	tF(t, "победа муад'диба", false,
 		"победа|муад'диба")
+}
+
+func TestParser038(t *testing.T) {
+	t.Parallel()
+
+	txt := "Working with gzip"
+
+	b := bytes.NewBuffer(nil)
+	gz := gzip.NewWriter(b)
+	if _, err := gz.Write([]byte(txt)); err != nil {
+		log.Fatal(err)
+	}
+	if err := gz.Close(); err != nil {
+		log.Fatal(err)
+	}
+
+	tFB(t, b.Bytes(), false, "working|with|gzip")
 }

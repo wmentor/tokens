@@ -4,8 +4,10 @@ package tokens
 
 import (
 	"bufio"
+	"compress/gzip"
 	"io"
 	"strings"
+	"sync"
 	"unicode"
 
 	buffer "github.com/wmentor/tbuf"
@@ -15,6 +17,10 @@ import (
 
 const (
 	bufferSize = 5
+)
+
+var (
+	_ io.Closer = (*Tokenizer)(nil)
 )
 
 // Option - опция конструктора.
@@ -30,6 +36,8 @@ type Tokenizer struct {
 	mkr2          strings.Builder
 	rewriteRune   map[rune]rune
 	fsmTab        []stateFunc
+	toClose       []io.Closer
+	once          sync.Once
 	prevRune      rune
 	endDone       bool
 	caseSensitive bool
@@ -45,7 +53,7 @@ func WithCaseSensitive() Option {
 }
 
 // New - конструктор нового Tokenizer.
-func New(rh io.Reader, opts ...Option) *Tokenizer {
+func New(rh io.Reader, opts ...Option) (*Tokenizer, error) {
 	buf, _ := buffer.New(bufferSize)
 
 	tokenizer := &Tokenizer{
@@ -54,6 +62,19 @@ func New(rh io.Reader, opts ...Option) *Tokenizer {
 		buffer:      buf,
 		rewriteRune: rewriteRune,
 		fsmTab:      make([]stateFunc, 11),
+	}
+
+	testBytes, err := tokenizer.rd.Peek(2)
+
+	// check first 2 bytes from GZIP file format specification https://www.ietf.org/rfc/rfc1952.txt
+	if err == nil && testBytes[0] == 31 && testBytes[1] == 139 {
+		gzreader, err := gzip.NewReader(tokenizer.rd)
+		if err != nil {
+			return nil, err
+		}
+		tokenizer.toClose = append(tokenizer.toClose, gzreader)
+
+		tokenizer.rd = bufio.NewReader(gzreader)
 	}
 
 	tokenizer.fsmTab[0] = tokenizer.state0
@@ -72,7 +93,16 @@ func New(rh io.Reader, opts ...Option) *Tokenizer {
 		opt(tokenizer)
 	}
 
-	return tokenizer
+	return tokenizer, nil
+}
+
+func (t *Tokenizer) Close() error {
+	t.once.Do(func() {
+		for _, rec := range t.toClose {
+			rec.Close()
+		}
+	})
+	return nil
 }
 
 // Token - возвращает следующий токен или miner.ErrEndInput, если достигли конца.
