@@ -247,17 +247,20 @@ func TestParser035(t *testing.T) {
 
 func TestParser036(t *testing.T) {
 	t.Parallel()
-	tF(t, "learn C++11 now", false,
-		"learn|c|+|+|11|now")
+	tF(t, "learn C++11 now", false, "learn|c|+|+|11|now")
 }
 
 func TestParser037(t *testing.T) {
 	t.Parallel()
-	tF(t, "победа муад'диба", false,
-		"победа|муад'диба")
+	tF(t, "победа муад'диба", false, "победа|муад'диба")
 }
 
 func TestParser038(t *testing.T) {
+	t.Parallel()
+	tF(t, "о’хара", false, "о'хара")
+}
+
+func TestParser039(t *testing.T) {
 	t.Parallel()
 
 	txt := "Working with gzip"
